@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  nextjs:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,7 +27,7 @@ services:
       - ./apache/logs:/usr/local/apache2/logs
       - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
     depends_on:
-      - nextjs
+      - app
     networks:
       - app-network
 
