@@ -10,6 +10,9 @@ RUN npm install
 # Kaynak kodları kopyala
 COPY . .
 
+# Public klasörü oluştur (eğer yoksa)
+RUN mkdir -p public
+
 # Production build oluştur
 RUN npm run build
 
@@ -27,6 +30,7 @@ COPY --from=builder /app/node_modules ./node_modules
 # Environment değişkenlerini ayarla
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Port'u aç
 EXPOSE 3000
