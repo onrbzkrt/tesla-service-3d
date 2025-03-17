@@ -14,17 +14,18 @@ services:
     networks:
       - app-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: tesla-service-nginx
+  apache:
+    image: httpd:2.4-alpine
+    container_name: tesla-service-apache
     restart: always
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/logs:/var/log/nginx
+      - ./apache/conf.d:/usr/local/apache2/conf.d
+      - ./apache/ssl:/usr/local/apache2/ssl
+      - ./apache/logs:/usr/local/apache2/logs
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
     depends_on:
       - nextjs
     networks:
