@@ -1,24 +1,102 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, SpotLight } from '@react-three/drei';
+import { OrbitControls, Environment, SpotLight, useProgress } from '@react-three/drei';
 import dynamic from 'next/dynamic';
-import LoadingScreen from './LoadingScreen';
 
-// TeslaModel'i dynamic import ile yükleyelim
 const TeslaModel = dynamic(() => import('./TeslaModel'), {
   ssr: false,
-  loading: () => <LoadingScreen />
 });
 
+function LoadingScreen() {
+  const { progress } = useProgress();
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => setShow(false), 1000);
+    }
+  }, [progress]);
+
+  if (!show) return null;
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      background: 'black',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+    }}>
+      <div style={{ textAlign: 'center', color: 'white' }}>
+        <div style={{
+          width: '50px',
+          height: '50px',
+          border: '3px solid #3B82F6',
+          borderTop: '3px solid transparent',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          margin: '0 auto 20px auto'
+        }} />
+        <div style={{ fontSize: '24px', marginBottom: '10px' }}>
+          {Math.round(progress)}%
+        </div>
+        <div style={{ fontSize: '18px', color: '#888' }}>
+          Yükleniyor...
+        </div>
+      </div>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 const Scene = () => {
+  const [domLoaded, setDomLoaded] = useState(false);
+
+  useEffect(() => {
+    setDomLoaded(true);
+  }, []);
+
+  if (!domLoaded) {
+    return (
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+        background: 'black',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <div style={{
+          width: '50px',
+          height: '50px',
+          border: '3px solid #3B82F6',
+          borderTop: '3px solid transparent',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-screen bg-black relative">
+      <LoadingScreen />
       <Canvas
         shadows
         camera={{ position: [0, 0, 15], fov: 45 }}
         style={{ background: '#000000' }}
       >
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={null}>
           <Environment preset="night" />
           
           {/* Ana spot ışığı - Sol alt köşeden */}
