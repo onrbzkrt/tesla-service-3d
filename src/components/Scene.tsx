@@ -1,140 +1,97 @@
-"use client";
-
+import { Suspense, lazy } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, SpotLight, Environment } from '@react-three/drei';
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { OrbitControls, Environment, SpotLight } from '@react-three/drei';
+import LoadingScreen from './LoadingScreen';
 
-const TeslaModel = dynamic(() => import('./TeslaModel'), {
-  ssr: false,
-  loading: () => null
-});
+const TeslaModel = lazy(() => import('./TeslaModel'));
 
-export default function Scene() {
+const Scene = () => {
   return (
-    <div 
-      style={{ 
-        width: '100%', 
-        height: '100vh',
-        position: 'relative',
-        overflow: 'hidden',
-        background: '#000000'
-      }}
-    >
-      {/* Başlık Konteyner */}
-      <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        background: 'rgba(0, 0, 0, 0.8)',
-        backdropFilter: 'blur(10px)',
-        padding: '30px 50px',
-        borderRadius: '15px',
-        boxShadow: '0 0 30px rgba(0, 0, 0, 0.5)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        zIndex: 1000,
-        textAlign: 'center'
-      }}>
-        <h1 style={{
-          color: '#fff',
-          fontSize: '2.5rem',
-          margin: '0 0 15px 0',
-          textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-          fontWeight: 'bold',
-          letterSpacing: '1px',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-        }}>
-          Tesla Service Excellence
-        </h1>
-        <p style={{
-          color: '#e2e8f0',
-          fontSize: '1.25rem',
-          margin: 0,
-          textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-          letterSpacing: '0.5px',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-          fontWeight: '500'
-        }}>
-          Professional Repair, Maintenance & Diagnostics
-        </p>
-      </div>
-
-      <Canvas 
-        shadows 
-        camera={{ position: [5, 2, 8], fov: 45 }}
-        gl={{ alpha: true, antialias: true }}
-      >
-        <color attach="background" args={['#111111']} />
-        <Environment preset="warehouse" intensity={2} />
+    <>
+      <LoadingScreen />
+      <div className="w-full h-screen bg-black">
+        <Canvas
+          shadows
+          camera={{ position: [0, 0, 15], fov: 45 }}
+          style={{ background: '#000000' }}
+        >
+          <Suspense fallback={null}>
+            <Environment preset="night" />
+            
+            {/* Ana spot ışığı - Sol alt köşeden */}
+            <SpotLight
+              position={[-10, -5, 10]}
+              angle={0.6}
+              penumbra={0.5}
+              intensity={400}
+              color="#4169e1"
+              castShadow
+            />
+            
+            {/* İkinci spot ışığı - Sağ üst köşeden */}
+            <SpotLight
+              position={[10, 5, 10]}
+              angle={0.6}
+              penumbra={0.5}
+              intensity={400}
+              color="#ffd700"
+              castShadow
+            />
+            
+            {/* Takip eden spot ışıkları */}
+            <SpotLight
+              position={[0, 0, 10]}
+              angle={0.3}
+              penumbra={0.2}
+              intensity={300}
+              color="#ffffff"
+              castShadow
+            />
+            
+            {/* Yan spot ışıkları */}
+            <SpotLight
+              position={[-5, 0, 5]}
+              angle={0.5}
+              penumbra={0.5}
+              intensity={200}
+              color="#ffffff"
+              castShadow
+            />
+            <SpotLight
+              position={[5, 0, 5]}
+              angle={0.5}
+              penumbra={0.5}
+              intensity={200}
+              color="#ffffff"
+              castShadow
+            />
+            
+            {/* Ortam ışığı */}
+            <ambientLight intensity={0.5} />
+            
+            {/* Merkez yardımcı ışık */}
+            <pointLight position={[0, 0, 10]} intensity={200} />
+            
+            <TeslaModel />
+            
+            <OrbitControls
+              enableZoom={false}
+              enablePan={false}
+              enableRotate={false}
+            />
+          </Suspense>
+        </Canvas>
         
-        <Suspense fallback={null}>
-          <TeslaModel />
-
-          {/* Ön ışık */}
-          <SpotLight
-            position={[0, 2, 5]}
-            intensity={800}
-            angle={0.9}
-            penumbra={0.5}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Arka ışık */}
-          <SpotLight
-            position={[0, 2, -5]}
-            intensity={600}
-            angle={0.9}
-            penumbra={0.5}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Sol ışık */}
-          <SpotLight
-            position={[-5, 2, 0]}
-            intensity={700}
-            angle={0.8}
-            penumbra={0.4}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Sağ ışık */}
-          <SpotLight
-            position={[5, 2, 0]}
-            intensity={700}
-            angle={0.8}
-            penumbra={0.4}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Üst ışık */}
-          <SpotLight
-            position={[0, 5, 0]}
-            intensity={500}
-            angle={0.8}
-            penumbra={0.4}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Ortam ışığı */}
-          <ambientLight intensity={1.5} />
-
-          {/* Dolgu ışıkları */}
-          <pointLight position={[2, 0, 2]} intensity={300} />
-          <pointLight position={[-2, 0, -2]} intensity={300} />
-
-          <OrbitControls
-            enableRotate={false}
-            enableZoom={false}
-            enablePan={false}
-          />
-        </Suspense>
-      </Canvas>
-    </div>
+        {/* Metin içeriği */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10">
+          <div className="bg-gradient-to-r from-black/80 to-black/80 backdrop-blur-sm p-8 rounded-xl shadow-2xl">
+            <h1 className="text-4xl font-bold text-white mb-4">Tesla Service Excellence</h1>
+            <p className="text-xl text-gray-300">Professional Repair, Maintenance & Diagnostics</p>
+          </div>
+        </div>
+      </div>
+    </>
   );
-}
+};
+
+export default Scene;
