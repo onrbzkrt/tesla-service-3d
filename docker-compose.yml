@@ -8,29 +8,6 @@ services:
     container_name: tesla-service-3d
     restart: always
     ports:
-      - "3000:3000"
+      - "80:3000"
     environment:
       - NODE_ENV=production
-    networks:
-      - app-network
-
-  apache:
-    image: httpd:2.4-alpine
-    container_name: tesla-service-apache
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./apache/conf.d:/usr/local/apache2/conf.d
-      - ./apache/ssl:/usr/local/apache2/ssl
-      - ./apache/logs:/usr/local/apache2/logs
-      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
-    depends_on:
-      - app
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
