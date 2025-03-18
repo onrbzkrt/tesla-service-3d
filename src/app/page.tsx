@@ -61,7 +61,7 @@ export default function Home() {
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="rounded-full bg-primary px-8 py-3 font-semibold text-white transition-all hover:bg-primary/80"
+          className="rounded-full bg-transparent border-2 border-primary/50 px-8 py-3 font-medium text-primary backdrop-blur-sm transition-all hover:bg-primary/10 hover:border-primary"
         >
           Explore
         </motion.button>
