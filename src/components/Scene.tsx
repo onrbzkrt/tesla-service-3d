@@ -26,68 +26,61 @@ export default function Scene() {
         camera={{ position: [5, 2, 8], fov: 45 }}
         gl={{ alpha: true, antialias: true }}
       >
-        <color attach="background" args={['#111111']} />
-        <Environment preset="warehouse" />
+        <color attach="background" args={['#0a0a0a']} />
+        <Environment preset="studio" />
         
         <Suspense fallback={null}>
           <TeslaModel />
 
-          {/* Ön ışık */}
+          {/* Sağ üst spot */}
           <SpotLight
-            position={[0, 2, 5]}
-            intensity={800}
-            angle={0.9}
-            penumbra={0.5}
+            position={[6, 8, 2]}
+            intensity={900}
+            angle={0.4}
+            penumbra={0.2}
             castShadow
             color="#ffffff"
+            target-position={[0, 0, 0]}
           />
 
-          {/* Arka ışık */}
+          {/* Sol üst spot */}
           <SpotLight
-            position={[0, 2, -5]}
+            position={[-6, 8, 2]}
+            intensity={900}
+            angle={0.4}
+            penumbra={0.2}
+            castShadow
+            color="#ffffff"
+            target-position={[0, 0, 0]}
+          />
+
+          {/* Ön destek ışığı */}
+          <SpotLight
+            position={[0, 4, 6]}
             intensity={600}
-            angle={0.9}
-            penumbra={0.5}
+            angle={0.5}
+            penumbra={0.3}
             castShadow
-            color="#ffffff"
+            color="#f8fafc"
           />
 
-          {/* Sol ışık */}
+          {/* Üst merkez vurgu */}
           <SpotLight
-            position={[-5, 2, 0]}
-            intensity={700}
-            angle={0.8}
-            penumbra={0.4}
+            position={[0, 10, 0]}
+            intensity={800}
+            angle={0.3}
+            penumbra={0.2}
             castShadow
             color="#ffffff"
           />
 
-          {/* Sağ ışık */}
-          <SpotLight
-            position={[5, 2, 0]}
-            intensity={700}
-            angle={0.8}
-            penumbra={0.4}
-            castShadow
-            color="#ffffff"
-          />
+          {/* Genel ortam ışığı */}
+          <ambientLight intensity={0.2} />
 
-          {/* Üst ışık */}
-          <SpotLight
-            position={[0, 5, 0]}
-            intensity={500}
-            angle={0.8}
-            penumbra={0.4}
-            castShadow
-            color="#ffffff"
-          />
-
-          {/* Ortam ışığı */}
-          <ambientLight intensity={1.5} />
-
-          {/* Dolgu ışıkları */}
-          <pointLight position={[2, 0, 2]} intensity={300} />
-          <pointLight position={[-2, 0, -2]} intensity={300} />
+          {/* Zemin aydınlatması */}
+          <pointLight position={[0, -1, 0]} intensity={300} color="#ffffff" />
+          <pointLight position={[3, -1, 2]} intensity={200} color="#f1f5f9" />
+          <pointLight position={[-3, -1, 2]} intensity={200} color="#f1f5f9" />
 
           <OrbitControls
             enableRotate={false}
