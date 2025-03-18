@@ -5,15 +5,6 @@ import Image from 'next/image';
 import { FaWhatsapp, FaTelegram, FaViber, FaInstagram } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
-declare global {
-  interface Window {
-    innerWidth: number;
-    innerHeight: number;
-    addEventListener: any;
-    removeEventListener: any;
-  }
-}
-
 interface WindowSize {
   width: number;
   height: number;
