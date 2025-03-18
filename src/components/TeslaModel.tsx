@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import { Group } from 'three';
+import { useFrame } from '@react-three/fiber';
+import { useRef, useState, useEffect } from 'react';
+import * as THREE from 'three';
 
 export default function TeslaModel() {
-  const group = useRef<Group>(null);
+  const group = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/tesla/model.glb');
   const [shouldRotate, setShouldRotate] = useState(true);
 
@@ -24,12 +24,18 @@ export default function TeslaModel() {
       group.current.rotation.y = -(state.clock.getElapsedTime() * rotationSpeed * 0.1) % (Math.PI * 2);
     }
   });
-  
+
+  scene.traverse((child) => {
+    if (child instanceof THREE.Mesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
 
   return (
     <group ref={group} dispose={null}>
-      <primitive 
-        object={scene} 
+      <primitive
+        object={scene}
         scale={[1.8, 1.8, 1.8]}
         position={[13, -11, -3]}
         rotation={[0.00002, 1.45, 0.1]}

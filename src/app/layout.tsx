@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import './globals.css';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -9,17 +9,17 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "EV Expert",
-  description: "Electric Vehicle Charging Solutions",
+  description: "Professional Tesla Service & Maintenance",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>
+    <html lang="tr">
+      <body className={inter.className}>
         {children}
       </body>
     </html>

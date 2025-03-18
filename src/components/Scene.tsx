@@ -27,7 +27,7 @@ export default function Scene() {
         gl={{ alpha: true, antialias: true }}
       >
         <color attach="background" args={['#111111']} />
-        <Environment preset="warehouse" intensity={2} />
+        <Environment preset="warehouse" />
         
         <Suspense fallback={null}>
           <TeslaModel />

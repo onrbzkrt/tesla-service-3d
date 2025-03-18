@@ -11,18 +11,6 @@ const nextConfig = {
   },
   experimental: {
     esmExternals: 'loose'
-  },
-  output: 'standalone',
-  env: {
-    PORT: process.env.PORT || '1905'
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/:path*',
-        destination: '/:path*'
-      }
-    ]
   }
 };
 
